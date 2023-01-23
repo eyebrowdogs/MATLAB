@@ -77,22 +77,8 @@ function root=BisectionVerb(F,x1,x2,t,i,p)
 
 %p flag graphs
     if (p==true)          %graficos de error y valor si p=1
-        subplot(2,1,1);
-        plot(errs,LineWidth=2,Color=[1 0 0])
-        title('Porcentaje de error')
-        xlabel('iteraciones')
-        ylabel('% error')
-        
-
-        subplot(2,1,2);
-        plot(groots,LineWidth=2)
-        title('Estimado de solucion')
-        xlabel('iteraciones')
-        ylabel('valor')
-        yline(groots(v),Color=[0.9290 0.6940 0.1250],LineWidth=1.5,LineStyle="--") %linea de valor final
-        
-        
-
+      
+        grapher(F,errs,groots)
 
     else
         disp(" ")
