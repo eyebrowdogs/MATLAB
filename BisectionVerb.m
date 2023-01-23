@@ -78,7 +78,7 @@ function root=BisectionVerb(F,x1,x2,t,i,p)
 %p flag graphs
     if (p==true)          %graficos de error y valor si p=1
       
-        grapher(F,errs,groots)
+        grapher(F,errs,groots,v)
 
     else
         disp(" ")
