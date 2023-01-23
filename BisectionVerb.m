@@ -1,3 +1,4 @@
+%bisection method code with graphs and slope checking
 function root=BisectionVerb(F,x1,x2,t,i,p)
 
     syms x             %symbolic var x to Fdiff
