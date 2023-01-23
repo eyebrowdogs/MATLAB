@@ -14,12 +14,20 @@ subplot(3,1,2);
         xlabel('iteraciones')
         ylabel('valor')
         yline(rootV(v),Color=[0.9290 0.6940 0.1250],LineWidth=1.5,LineStyle="--")
+
         
 subplot(3,1,3)
-        fplot(func)
+        fplot(func,LineWidth=3)
+        xlim([-4 4])
+        ylim([-4 v])
+        title('Grafico de funcion')
+        xlabel('x')
+        ylabel('y')
         yline(0,Color=[0.9290 0.6940 0.1250],LineWidth=1.5,LineStyle="--")
         xline(0,Color=[0.9290 0.6940 0.1250],LineWidth=1.5,LineStyle="--")
         hold on
         plot(rootV(v),func(rootV(v)),'r*')
+        plot(rootV,0:v,LineWidth=2,Color=[1 0 0])
+        hold off;
 
 end
