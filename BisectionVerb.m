@@ -1,5 +1,5 @@
 %bisection method code with graphs and slope checking
-function root=BisectionVerb(F,x1,x2,t,i,p)
+function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
 
     syms x             %symbolic var x to Fdiff
     x = x1;            %passing val to simb var
@@ -34,8 +34,9 @@ function root=BisectionVerb(F,x1,x2,t,i,p)
         
 
         xmEval=fx(xm);          %first mid val eval
-        v=0;                %loop counter, vector indexer
+        v=1;                %loop counter, vector indexer, iterations ran
         ie=100;             % initial error ???
+        groots(v)=xm;
 
         while v <= i  && ie >= t         %iteration and tolerance checking
     
@@ -64,6 +65,8 @@ function root=BisectionVerb(F,x1,x2,t,i,p)
 
 %final val vs iteration error array
     e=1; %counter de loop error
+
+    %populates error matrix
      
     while e<v           %loop de matriz de errores V is now lenght of indexing vector
      errs(e) = ((abs((groots(v)-groots(e+1))))/groots(v))*100; %calcula el errores de cada elemento del array vs el final
@@ -80,16 +83,15 @@ function root=BisectionVerb(F,x1,x2,t,i,p)
       
         grapher(F,errs,groots,v)
 
+
+    %text version of results
+
     else
-        disp(" ")
-        disp(" ")
-        disp("Resultados")
-        disp(" ")
-        disp("Raiz: ")    %resultado final si p =0
-        disp(groots(v))
-        disp("Iteraciones:")
-        disp(v)
+       verboser(v,groots)
     end
    
+errors = size(errs)
+vals = size(groots)
+return
 
 end
