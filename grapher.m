@@ -10,6 +10,7 @@ subplot(3,1,1);
 
 subplot(3,1,2);
         plot(rootV,LineWidth=2)
+        xlim([2 v])
         title('Estimado de solucion')
         xlabel('Iteraciones')
         ylabel('Valor de x')

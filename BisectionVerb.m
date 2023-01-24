@@ -65,10 +65,11 @@ function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
 
 %final val vs iteration error array
     e=1; %counter de loop error
-
+    errs(e) = nan;
+    e = e + 1;
     %populates error matrix
      
-    while e<v           %loop de matriz de errores V is now lenght of indexing vector
+    while e<=v           %loop de matriz de errores V is now lenght of indexing vector
      errs(e) = ((abs((groots(v)-groots(e+1))))/groots(v))*100; %calcula el errores de cada elemento del array vs el final
      e=e+1;
     end
@@ -90,8 +91,11 @@ function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
        verboser(v,groots)
     end
    
-errors = size(errs)
-vals = size(groots)
+errors = size(errs);
+vals = size(groots);
+errors = errs;
+vals = groots;
+root = groots(v);
 return
 
 end
