@@ -1,4 +1,4 @@
-function raiz=fixedpoint(F,x1,t,i,p)
+function raiz=FixedPverb(F,x1,t,i,p)
  % F en funcion x=g(x)
  % x1 primer valor
  % t tolerancia ahora si implementada :)))))
@@ -33,32 +33,14 @@ function raiz=fixedpoint(F,x1,t,i,p)
     end
 
     if (p==true)          %graficos de error y valor si p=1
-        subplot(2,1,1);
-        plot(errs,LineWidth=2,Color=[1 0 0])
-        title('Porcentaje de error')
-        xlabel('iteraciones')
-        ylabel('% error')
-        
+      
+        grapher(F,errs,groots,v)
 
-        subplot(2,1,2);
-        plot(groots,LineWidth=2)
-        title('Estimado de solucion')
-        xlabel('iteraciones')
-        ylabel('valor')
-        yline(groots(v),Color=[0.9290 0.6940 0.1250],LineWidth=1.5,LineStyle="--") %linea de valor final
-        
-        
 
+    %text version of results
 
     else
-        disp(" ")
-        disp(" ")
-        disp("Resultados")
-        disp(" ")
-        disp("Raiz: ")    %resultado final si p =0
-        disp(groots(v))
-        disp("Iteraciones:")
-        disp(v)
+       verboser(v,groots)
     end
 
     

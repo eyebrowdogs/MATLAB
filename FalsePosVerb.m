@@ -93,19 +93,8 @@ function root=FalsePosVerb(F,x1,x2,t,i,p)
         
       grapher(F,errs,groots,v)
 
-        
-        
-
-
     else
-        disp(" ")
-        disp(" ")
-        disp("Resultados")
-        disp(" ")
-        disp("Raiz: ")    %resultado final si p =0
-        disp(groots(v))
-        disp("Iteraciones:")
-        disp(v)
+         verboser(v,groots)
     end
    
 

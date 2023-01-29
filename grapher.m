@@ -18,10 +18,10 @@ subplot(3,1,2);
 
         
 subplot(3,1,3)
-        limitx = max(rootV);
+        %limitx = max(rootV);
         fplot(func,LineWidth=3)
-        xlim([rootV(v)-limitx rootV(v)+limitx])
-        ylim([-(rootV(v)/2) rootV(v)])
+        %xlim([rootV(v)-limitx rootV(v)+limitx])
+        %ylim([-(rootV(v)/2) rootV(v)])
         title('Grafico de funcion')
         xlabel('x')
         ylabel('y')
