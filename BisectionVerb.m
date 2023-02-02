@@ -1,5 +1,6 @@
 %bisection method code with graphs and slope checking
 function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
+    fl = F;
 
     syms x             %symbolic var x to Fdiff
     x = x1;            %passing val to simb var
@@ -15,6 +16,7 @@ function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
         x2=l;
         fpp=true;       %flipped state flag
     end
+
 
 
     fx=F;               %name change idkw
@@ -82,7 +84,7 @@ function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
 %p flag graphs
     if (p==true)          %graficos de error y valor si p=1
       
-        grapher(F,errs,groots,v)
+        grapher(F,errs,groots,v,fl)
 
 
     %text version of results

@@ -1,0 +1,279 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>BisectionVerb</title><meta name="generator" content="MATLAB 9.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-02-01"><meta name="DC.source" content="BisectionVerb.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%bisection method code with graphs and slope checking</span>
+<span class="keyword">function</span> [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
+</pre><pre class="codeinput">    syms <span class="string">x</span>             <span class="comment">%symbolic var x to Fdiff</span>
+    x = x1;            <span class="comment">%passing val to simb var</span>
+    sf=sym(F);          <span class="comment">%Matlab function to sym func</span>
+    Fdiff=diff(sf);     <span class="comment">%differientiation of f</span>
+    Fderi=subs(Fdiff);   <span class="comment">%evaluation of f' in x1 val</span>
+
+    <span class="keyword">if</span> Fderi&lt;0       <span class="comment">%if f' neg, x's are flipped</span>
+        l=x1;           <span class="comment">%placeholders</span>
+        r=x2;
+
+        x1=r;           <span class="comment">%flipping</span>
+        x2=l;
+        fpp=true;       <span class="comment">%flipped state flag</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeoutput error">Not enough input arguments.
+
+Error in BisectionVerb (line 5)
+    x = x1;            %passing val to simb var
+</pre><p><img src="BisectionVerb_eq05763904313308679927.png" alt="$$e^{\pi i} + 1 = 0$$" style="width:52px;height:11px;"></p><pre class="codeinput">    fx=F;               <span class="comment">%name change idkw</span>
+    r1=fx(x1);          <span class="comment">%func evals in guess (root) 1 and two</span>
+    r2=fx(x2);
+
+    <span class="keyword">if</span>  (r1&gt;0 &amp;&amp; r2&gt;0) || (r1&lt;0 &amp;&amp; r2&lt;0) <span class="comment">%if no sign change, no intersection, no roots are avaiilable in this method</span>
+        disp(<span class="string">"Invalid guessess :( method will diverge"</span>)
+        root=(<span class="string">"error"</span>);
+        <span class="keyword">return</span>
+    <span class="keyword">end</span>
+
+
+ <span class="comment">%root calculation</span>
+        xm=(x1+x2)/2;        <span class="comment">% first mid x value</span>
+
+
+
+        xmEval=fx(xm);          <span class="comment">%first mid val eval</span>
+        v=1;                <span class="comment">%loop counter, vector indexer, iterations ran</span>
+        ie=100;             <span class="comment">% initial error ???</span>
+        groots(v)=xm;
+
+        <span class="keyword">while</span> v &lt;= i  &amp;&amp; ie &gt;= t         <span class="comment">%iteration and tolerance checking</span>
+
+            <span class="keyword">if</span> xmEval&gt;0             <span class="comment">%crosses in x1 to xm</span>
+                    x2=xm;          <span class="comment">%leftmost is now xm</span>
+
+                <span class="keyword">else</span>                <span class="comment">% corsses in xm to x2</span>
+                    x1=xm;          <span class="comment">% right most is now xm</span>
+            <span class="keyword">end</span> <span class="comment">%</span>
+            groots(v+1)=xm;     <span class="comment">% first x val in array</span>
+            <span class="comment">% uses second val after first middel evaluation, must fix</span>
+            pastxm=xm;
+            xm=(x1+x2)/2;       <span class="comment">% new middle val after crossing condition and assign</span>
+            currxm=xm;          <span class="comment">%current xm val</span>
+
+            <span class="comment">%momentary error calc</span>
+            disp(<span class="string">'past-current val error'</span>)
+            ie=((abs((pastxm-currxm)))/pastxm)*100;      <span class="comment">%calcula error de elemento actual vs pasado</span>
+            disp(ie) <span class="comment">%muestra valor actual de error</span>
+
+            xmEval=fx(xm);          <span class="comment">%eval current xm</span>
+            v=v+1;              <span class="comment">%loop++</span>
+            groots(v+1)=xm;     <span class="comment">%new val in array</span>
+        <span class="keyword">end</span>           <span class="comment">%while loop</span>
+
+
+<span class="comment">%final val vs iteration error array</span>
+    e=1; <span class="comment">%counter de loop error</span>
+    errs(e) = nan;
+    e = e + 1;
+    <span class="comment">%populates error matrix</span>
+
+    <span class="keyword">while</span> e&lt;=v           <span class="comment">%loop de matriz de errores V is now lenght of indexing vector</span>
+     errs(e) = ((abs((groots(v)-groots(e+1))))/groots(v))*100; <span class="comment">%calcula el errores de cada elemento del array vs el final</span>
+     e=e+1;
+    <span class="keyword">end</span>
+
+
+    <span class="keyword">if</span> fpp==true <span class="comment">%prints if diff at x1 is neg ... x's were flipped</span>
+        disp(<span class="string">"Flipped x's"</span>)
+    <span class="keyword">end</span>
+
+<span class="comment">%p flag graphs</span>
+    <span class="keyword">if</span> (p==true)          <span class="comment">%graficos de error y valor si p=1</span>
+
+        grapher(F,errs,groots,v)
+
+
+    <span class="comment">%text version of results</span>
+
+    <span class="keyword">else</span>
+       verboser(v,groots)
+    <span class="keyword">end</span>
+
+errors = size(errs);
+vals = size(groots);
+errors = errs;
+vals = groots;
+root = groots(v);
+<span class="keyword">return</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%bisection method code with graphs and slope checking
+function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
+
+    syms x             %symbolic var x to Fdiff
+    x = x1;            %passing val to simb var
+    sf=sym(F);          %Matlab function to sym func
+    Fdiff=diff(sf);     %differientiation of f
+    Fderi=subs(Fdiff);   %evaluation of f' in x1 val
+    
+    if Fderi<0       %if f' neg, x's are flipped
+        l=x1;           %placeholders
+        r=x2;
+
+        x1=r;           %flipping
+        x2=l;
+        fpp=true;       %flipped state flag
+    end
+
+%%
+% 
+% $$e^{\pi i} + 1 = 0$$
+% 
+
+    fx=F;               %name change idkw
+    r1=fx(x1);          %func evals in guess (root) 1 and two
+    r2=fx(x2);
+
+    if  (r1>0 && r2>0) || (r1<0 && r2<0) %if no sign change, no intersection, no roots are avaiilable in this method
+        disp("Invalid guessess :( method will diverge")
+        root=("error");
+        return
+    end
+
+
+ %root calculation
+        xm=(x1+x2)/2;        % first mid x value
+
+        
+
+        xmEval=fx(xm);          %first mid val eval
+        v=1;                %loop counter, vector indexer, iterations ran
+        ie=100;             % initial error ???
+        groots(v)=xm;
+
+        while v <= i  && ie >= t         %iteration and tolerance checking
+    
+            if xmEval>0             %crosses in x1 to xm
+                    x2=xm;          %leftmost is now xm
+        
+                else                % corsses in xm to x2
+                    x1=xm;          % right most is now xm 
+            end %
+            groots(v+1)=xm;     % first x val in array 
+            % uses second val after first middel evaluation, must fix
+            pastxm=xm;
+            xm=(x1+x2)/2;       % new middle val after crossing condition and assign
+            currxm=xm;          %current xm val
+    
+            %momentary error calc
+            disp('past-current val error')             
+            ie=((abs((pastxm-currxm)))/pastxm)*100;      %calcula error de elemento actual vs pasado
+            disp(ie) %muestra valor actual de error
+    
+            xmEval=fx(xm);          %eval current xm
+            v=v+1;              %loop++
+            groots(v+1)=xm;     %new val in array
+        end           %while loop
+    
+
+%final val vs iteration error array
+    e=1; %counter de loop error
+    errs(e) = nan;
+    e = e + 1;
+    %populates error matrix
+     
+    while e<=v           %loop de matriz de errores V is now lenght of indexing vector
+     errs(e) = ((abs((groots(v)-groots(e+1))))/groots(v))*100; %calcula el errores de cada elemento del array vs el final
+     e=e+1;
+    end
+
+
+    if fpp==true %prints if diff at x1 is neg ... x's were flipped
+        disp("Flipped x's")
+    end
+
+%p flag graphs
+    if (p==true)          %graficos de error y valor si p=1
+      
+        grapher(F,errs,groots,v)
+
+
+    %text version of results
+
+    else
+       verboser(v,groots)
+    end
+   
+errors = size(errs);
+vals = size(groots);
+errors = errs;
+vals = groots;
+root = groots(v);
+return
+
+end
+##### SOURCE END #####
+--></body></html>

@@ -1,5 +1,5 @@
 function root=FalsePosVerb(F,x1,x2,t,i,p)
-
+fl = F;
     syms x             %symbolic var xd for syms opp
     x = x1;            %passing val to simb var
     sf=sym(F);          %eval symb func
@@ -91,7 +91,7 @@ function root=FalsePosVerb(F,x1,x2,t,i,p)
 %p flag graphs
     if (p==true)          %graficos de error y valor si p=1
         
-      grapher(F,errs,groots,v)
+      grapher(F,errs,groots,v,fl)
 
     else
          verboser(v,groots)

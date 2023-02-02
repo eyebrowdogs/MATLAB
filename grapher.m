@@ -1,5 +1,5 @@
 %graoher function for every method, takes in function, error vector and value vector
-function grapher(func,errV,rootV,v)
+function grapher(func,errV,rootV,v,fl)
 
 subplot(3,1,1);
         plot(errV,LineWidth=2,Color=[1 0 0])
@@ -19,11 +19,13 @@ subplot(3,1,2);
         
 subplot(3,1,3)
         %limitx = max(rootV);
+        tex = latex(sym(fl));
         fplot(func,LineWidth=3)
+        %text(rootV(v),func(rootV(v)),['$f = ' tex '$'], 'Interpreter','latex', 'FontSize',16);
         %xlim([rootV(v)-limitx rootV(v)+limitx])
         %ylim([-(rootV(v)/2) rootV(v)])
         title('Grafico de funcion')
-        xlabel('x')
+        xlabel(['$' tex '$'],Interpreter="latex")
         ylabel('y')
         yline(0,Color=[0.9290 0.6940 0.1250],LineWidth=1.5,LineStyle="--")
         xline(0,Color=[0.9290 0.6940 0.1250],LineWidth=1.5,LineStyle="--")
