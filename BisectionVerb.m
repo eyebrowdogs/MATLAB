@@ -1,5 +1,7 @@
 %bisection method code with graphs and slope checking
-function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
+function roots=BisectionVerb(F,x1,x2,t,i,p)
+
+
     fl = F;
 
     syms x             %symbolic var x to Fdiff
@@ -25,14 +27,15 @@ function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
 
     if  (r1>0 && r2>0) || (r1<0 && r2<0) %if no sign change, no intersection, no roots are avaiilable in this method
         disp("Invalid guessess :( method will diverge")
-        root=("error");
+        roots=("error");
         return
     end
 
 
  %root calculation
         xm=(x1+x2)/2;        % first mid x value
-
+        groots = [];
+        errs = [];
         
 
         xmEval=fx(xm);          %first mid val eval
@@ -56,7 +59,7 @@ function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
     
             %momentary error calc
             disp('past-current val error')             
-            ie=((abs((pastxm-currxm)))/pastxm)*100;      %calcula error de elemento actual vs pasado
+            ie=abs((abs((pastxm-currxm)))/pastxm)*100;      %calcula error de elemento actual vs pasado
             disp(ie) %muestra valor actual de error
     
             xmEval=fx(xm);          %eval current xm
@@ -72,7 +75,7 @@ function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
     %populates error matrix
      
     while e<=v           %loop de matriz de errores V is now lenght of indexing vector
-     errs(e) = ((abs((groots(v)-groots(e+1))))/groots(v))*100; %calcula el errores de cada elemento del array vs el final
+     errs(e) = abs((abs((groots(v)-groots(e+1))))/groots(v))*100; %calcula el errores de cada elemento del array vs el final
      e=e+1;
     end
 
@@ -92,12 +95,7 @@ function [root,vals,errors]=BisectionVerb(F,x1,x2,t,i,p)
     else
        verboser(v,groots)
     end
-   
-errors = size(errs);
-vals = size(groots);
-errors = errs;
-vals = groots;
-root = groots(v);
+
 return
 
 end

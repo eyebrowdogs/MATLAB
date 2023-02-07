@@ -10,7 +10,7 @@ subplot(3,1,1);
 
 subplot(3,1,2);
         plot(rootV,LineWidth=2)
-        xlim([2 v])
+        xlim([(v-2) v])
         title('Estimado de solucion',FontSize=20)
         xlabel('Iteraciones')
         ylabel('Valor de x')
@@ -24,7 +24,7 @@ subplot(3,1,3)
         %text(rootV(v),func(rootV(v)),['$f = ' tex '$'], 'Interpreter','latex', 'FontSize',16);
         %xlim([rootV(v)-limitx rootV(v)+limitx])
         sum = abs(max(rootV))+abs(min(rootV));
-        xlim([-sum sum])
+        xlim([-abs(sum) abs(sum)])
         title(['\boldmath$' tex '$'],Interpreter="latex",FontSize=28,FontWeight="bold")
         xlabel('x')
         ylabel('f(x)')
