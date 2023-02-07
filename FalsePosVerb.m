@@ -1,3 +1,5 @@
+%False position method with slope checking, missing normal eq
+
 function root=FalsePosVerb(F,x1,x2,t,i,p)
 fl = F;
     syms x             %symbolic var xd for syms opp
